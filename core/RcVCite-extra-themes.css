@@ -1,0 +1,110 @@
+/*http://rcvcite.net/
+
+The MIT License (MIT)
+
+Copyright (c) 2013 RcVCite
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.*/
+
+/*Something like white-on-black with a <div> border, black-on-white with a <div> border, dark color-on-sepia with a border, and one or two other light+dark greyish type themes. I hope this helps.*/
+
+
+/* white-on-black */
+span.rcvc_verse_ref div.rcvc_verse_overlay.wob{
+    color: #FFF;
+    background-color: #000;
+    border: 1px solid #AAA;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.wob div.rcvc_copyright{
+    color: #AAA;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.wob div.rcvc_verse_overlay_links{
+    background-color: inherit;
+    color: lightblue;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.wob div.rcvc_verse_overlay_links a{
+    color: lightblue;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.wob div.rcvc_verse_overlay_links a:hover{
+    color: blue;
+    background-color: inherit;
+}
+
+/* black-on-white */
+span.rcvc_verse_ref div.rcvc_verse_overlay.bow{
+    color: #000;
+    background-color: #FFF;
+    border: 1px solid #000;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.bow div.rcvc_copyright{
+    color: #444;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.bow div.rcvc_verse_overlay_links {
+    background-color: inherit;
+    color: blue;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.bow div.rcvc_verse_overlay_links a{
+    color: blue;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.bow div.rcvc_verse_overlay_links a:hover{
+    color: darkblue;
+    background-color: inherit;
+}
+
+/* dark color-on-sepia -- fake scroll */
+span.rcvc_verse_ref div.rcvc_verse_overlay.antique{
+    color: #704214;
+    background-color: #fff7ae;
+    border: 1px solid #704214;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.antique div.rcvc_copyright{
+    color: #704214;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.antique div.rcvc_verse_overlay_links{
+    background-color: inherit;
+    color: darkred;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.antique div.rcvc_verse_overlay_links a{
+    color: darkred;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.antique div.rcvc_verse_overlay_links a:hover{
+    color: red;
+    background-color: inherit;
+}
+
+/* light+dark greyish */
+span.rcvc_verse_ref div.rcvc_verse_overlay.gray01{
+    color: #606060;
+    background-color: #CCC;
+    border: 1px solid #606060
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.gray01 div.rcvc_copyright{
+    color: #606060;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.gray01 div.rcvc_verse_overlay_links{
+    background-color: inherit;
+    color: blue;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.gray01 div.rcvc_verse_overlay_links a{
+    color: blue;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay.gray01 div.rcvc_verse_overlay_links a:hover{
+    color: darkblue;
+    background-color: inherit;
+}

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RcVCite Tests</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="./jquery.js"></script>
+    <script type="text/javascript" src="./versification.js"></script>
+    <script type="text/javascript" src="./RcVCite_v00_04.js"></script>
+    <link rel="stylesheet" type="text/css" href="./RcVCite.css"/>
+  </head>
+  <body>
+    <div id="exclusion_tests">
+      <h1>Exclusion tests:</h1>
+      <p>Setup: Genesis chapter 1
+        
+      <h2>Time ranges</h2>
+      <p>12:10-12:20 AM
+      <p>12:10-12:20 am
+      <p>12:10-12:20 pm
+      <p>12:10-12:20am
+      <p>12:10-12:20  am
+      <p>2:10-2:20 am
+        
+      <h2>Time of day</h2>
+      <p>12:10 AM
+      <p>12:10 am
+      <p>12:10 pm
+      <p>12:10am
+      <p>12:10  am
+        
+      <h2>MAC Addresses</h2>
+      <p>10:10:10:10:10:10
+      <p>ff:ff:ff:ff:10:10
+      <p>FF:FF:FF:FF:10:10
+        
+      <h2>Words at the end of a sentence that end in v or vv</h2>
+      <p>this is a test wordv. 1
+      <p>this is a test wordvv. 1
+        
+      <h2>Page number abbreviations</h2>
+      <p>p. 1
+      <p>pp. 1-2
+    </div>
+    <div id="single_verse_tests">
+      <h1>Single verse tests:</h1>
+      <p>1 Cor. 1:1
+      <p>I Cor. 1:1
+      <p>First Cor. 1:1
+      <p>1 Corinthians has 1:1.
+      <p>1 Corinthians chapter 1 has verse 1
+      <p>1 Corinthians chapter 1 has v. 1
+      <p>1 Corinthians chapter 1 has v. 1a
+      <p>Random text 1 Cor. 1:1.
+      <p>1 Cor. 1:1 Random text.
+      <p>Random text. 1 Cor. 1:1 Random text.
+      <p>Random text. 1
+        Cor.
+1:1 Random text.
+    </div>
+    <div id="verse_range_tests">
+      <h1>Verse range tests:</h1>
+      <p>1 Cor. 1:1-2
+      <p>1 Corinthians chapter 1 has verses 1 through 2
+      <p>1 Corinthians chapter 1 has verses 1-2
+      <p>1 Corinthians chapter 1 has from verse 1 to 2
+      <p>1 Corinthians chapter 1 has vv. 1-2
+      <p>1 Corinthians chapter 1 has vv. 1b-2a
+      <p>1 Corinthians chapter 1 has random text vv. 1-2.
+      <p>1 Corinthians chapter 1 has vv. 1-2 Random text.
+      <p>1 Corinthians chapter 1 has Random text. vv. 1-2 Random text.
+      <p>1 Corinthians chapter 1 has Random text. vv.
+        1
+        -
+        2
+      <p>1 Corinthians chapter 1 has Random text. vv.
+        1:1
+        -
+        2
+    </div>
+    <div id="ignore_fitler_tests">
+      <h1>Ignore filter tests:</h1>
+      <h2>Time ranges</h2>
+      <div><span id='no_tag' class='rcvcite-ignore'>This should not be tagged (Gen. 1:1).</span>
+        This should be tagged (Rev. 1:1).</div>
+    </div>
+    <div id="iframe_tests">
+      <h1>Iframe tests:</h1>
+      <iframe src="./RcVCite_iframe_tests.html" width="400"></iframe>
+      <iframe src="http://rcvcite.net/" width="400"></iframe>
+    </div>
+    <script type="text/javascript">
+
+var get_reference = $node => {
+  var book = $node.attr('book');
+  var chapter = $node.attr('chapter');
+  var verse = $node.attr('verse');
+
+  return book +' '+chapter+':'+verse;
+};
+
+$(document).ready(function(){
+  window.error_list = [];
+  
+  $('#exclusion_tests p').each((index, value) => {
+    var $value = $(value);
+    RcVCite.cite(value, count => {
+      if (count > 0) {
+        window.error_list.push('FAIL - exclusion test "'+$value.text().trim()+'": unexpected citation.');
+      }
+    });
+  });
+  
+  (function(){
+    var expected = '1 Cor. 1:1';
+    $('#single_verse_tests p').each((index, value) => {
+      var $value = $(value);
+      RcVCite.cite(value, count => {
+        if (count !== 1) {
+          window.error_list.push('FAIL - single verse test "'+$value.text().trim()+'": no citation.');
+        } else {
+          var actual = get_reference($value.find('.rcvc_verse_ref'));
+          if (actual !== expected) {
+            window.error_list.push('FAIL - single verse test "'+$value.text().trim()+'": got '+actual+' expected '+expected);
+          }
+        }
+      });
+    });
+  })();
+  
+  (function(){
+    var expected = '1 Cor. 1:1-2';
+    $('#verse_range_tests p').each((index, value) => {
+      var $value = $(value);
+      RcVCite.cite(value, count => {
+        if (count !== 1) {
+          window.error_list.push('FAIL - verse range test "'+$value.text().trim()+'": no citation.');
+        } else {
+          var actual = get_reference($value.find('.rcvc_verse_ref'));
+          if (actual !== expected) {
+            window.error_list.push('FAIL - verse range test "'+$value.text().trim()+'": got '+actual+' expected '+expected);
+          }
+        }
+      });
+    });
+  })();
+  
+  (function(){
+    var expected = 'Rev. 1:1';
+    var original = RcVCite.ignoreFilter;
+    RcVCite.ignoreFilter = '.rcvcite-ignore';
+    var num_tests = 0;
+    if($('#ignore_fitler_tests div').each((index, value) => {
+      var $value = $(value);
+      ++num_tests;
+      RcVCite.cite(value, count => {
+        if (count < 1) {
+          window.error_list.push('FAIL - ignore filter test "'+$value.text().trim()+'": no citation.');
+        } else if (count > 1) {
+          window.error_list.push('FAIL - ignore filter test "'+$value.text().trim()+'": ignore filter failed.');
+        } else {
+          var actual = get_reference($value.find('.rcvc_verse_ref'));
+          if (actual !== expected) {
+            window.error_list.push('FAIL - ignore filter test "'+$value.text().trim()+'": got '+actual+' expected '+expected);
+          }
+        }
+        --num_tests;
+        if (num_tests<=0) {
+          RcVCite.ignoreFilter = original;
+        }
+      });
+    }).length !== 1) {
+      window.error_list.push('FAIL - ignore filter tests not found.');
+    }
+  })();
+  
+  (function(){
+    var expected = 'Jude 1:1';
+    if($('#iframe_tests').each((index, value) => {
+      var $value = $(value);
+      RcVCite.cite(value, count => {
+        if (count < 1) {
+          window.error_list.push('FAIL - iframe test "'+$value.text().trim()+'": no citation.');
+        } else if (count > 1) {
+          window.error_list.push('FAIL - iframe test "'+$value.text().trim()+'": ignore filter failed.');
+        } else {
+          var actual = get_reference($value.find('.rcvc_verse_ref'));
+          if (actual !== expected) {
+            window.error_list.push('FAIL - iframe test "'+$value.text().trim()+'": got '+actual+' expected '+expected);
+          }
+        }
+      });
+    }).length !== 1) {
+      window.error_list.push('FAIL - ignore filter tests not found.');
+    }
+  })();
+  
+  setTimeout(() => {
+    if (window.error_list.length > 0){
+      for (var index in window.error_list) {
+        console.error(window.error_list[index]);
+      }
+      console.log('jQuery Version: ' + window.jQuery.fn.jquery);
+      console.log('Failed '+window.error_list.length+' test(s)!');
+    } else {
+      console.log('jQuery Version: ' + window.jQuery.fn.jquery);
+      console.log('All tests passed!');
+    }
+    window.tests_finished = true;
+  }, 1);
+});
+    </script>
+  </body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<!--The MIT License (MIT)
+
+Copyright (c) 2020 RcVCite
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<html>
+  <head>
+    <title>Versification Compiler</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="versification_en_precomp.js"></script>
+  </head>
+  <body>
+<form id="compiler_configuration" action="javascript:false;">
+<label for="input_file">Input file: </label>
+<input type="file" id="input_file" name="input_file"><br />
+<label for="output_file">output file: </label>
+<input type="file" id="output_file" name="output_file"><br />
+<button id="build" name="build">Build</button>
+</form>
+<button id="test" name="test">Test</button>
+<pre style="color: red;" id="console"></pre>
+<pre id="preview"></pre>
+<pre style="display: none;" id="template" >//The MIT License (MIT)
+//
+//Copyright (c) %Year% RcVCite
+//
+//Permission is hereby granted, free of charge, to any person obtaining a copy
+//of this software and associated documentation files (the "Software"), to deal
+//in the Software without restriction, including without limitation the rights
+//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//copies of the Software, and to permit persons to whom the Software is
+//furnished to do so, subject to the following conditions:
+//
+//The above copyright notice and this permission notice shall be included in
+//all copies or substantial portions of the Software.
+//
+//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//THE SOFTWARE.
+
+var rcvcite_versification = %Config%;
+
+var OT;
+var NT;
+var getBook;
+var getBookRegex;
+
+(function(){
+
+%Code%
+
+})();
+</pre>
+<script>
+  
+var debug = false;
+  
+function emptyObj(obj) {
+  return Object.keys(obj).length < 1;
+}
+  
+function assert(value) {
+  if (!value) {
+    throw 'Assert failed!';
+  }
+}
+  
+class PathComponent {
+  constructor(component, data) {
+    this.value = component;
+    this.items = {};
+    this.data = data;
+    this.matcher = new RegExp('^' + this.toRegex());
+  }
+  
+  charAt(x) {
+    return this.value.charAt(x);
+  }
+  
+  hash() {
+    return this.value.hash();
+  }
+  
+  equal(other) {
+    return this.value === other.toString();
+  }
+  
+  addItem(to_add, data) {
+    if (to_add instanceof PathComponent) {
+      this.items[to_add.value] = to_add;
+    } else {
+      var comp = new PathComponent(to_add, data);
+      this.items[to_add] = comp;
+    }
+  }
+  
+  trySplit(other, data) {
+    if (other === this) {
+      return this;
+    }
+    
+    var other_val = other.toString();
+    
+    var len = this.value.length;
+    if (len > other_val.length) {
+      len = other_val.length;
+    }
+    
+    var x = 0;
+    for (; x < len && this.charAt(x) === other_val.charAt(x); ++x);
+    if (x === 0) {
+      return null;
+    }
+    
+    var replacement = new PathComponent(this.value.substring(0, x), null);
+    var sub_replacement = new PathComponent(this.value.substring(x), this.data);
+    sub_replacement.items = this.items;
+    replacement.addItem(sub_replacement);
+    replacement.addItem(other_val.substring(x), data);
+    
+    if (x === len) {
+      console.log("PROBE", replacement);
+    }
+    
+    assert(replacement.test(this.value));
+    assert(replacement.test(other_val));
+    
+    return replacement;
+  }
+  
+  test(to_test) {
+    return this.matcher.test(to_test);
+  }
+  
+  matchLength(to_check) {
+    var result = to_check.match(this.matcher);
+    if (!result) {
+      return null;
+    }
+
+    return result[0].length;
+  }
+  
+  toString() {
+    return this.value;
+  }
+  
+  toJSON() {
+    return emptyObj(this.items) ? this.data : this.items ;
+  }
+  
+  toRegex() {
+    var builder = this.value
+        .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        .replace(/\s+/, '\\s+')
+        .replace(/\.(.)/, '.\\s*$1');
+    if (emptyObj(this.items)) {
+      return builder;
+    }
+    
+    builder += '(?:';
+    var delimit = false;
+    for (var key in this.items) {
+      if (delimit) {
+        builder += '|';
+      } else {
+        delimit = true;
+      }
+      builder += this.items[key].toRegex();
+    }
+    return builder + ')';
+  }
+}
+
+class Matcher {
+  constructor() {
+    this.root = new PathComponent('', null);
+  }
+  
+  static findMatch(component, to_match) {
+    for (var key in component.items) {
+      var matcher = component.items[key];
+      if (matcher.test(to_match)) {
+        return matcher;
+      }
+    }
+    return null;
+  }
+  
+  static trySplit(component, new_entry, data) {
+    var key = null;
+    var split = null;
+    if (component.value !== '' && emptyObj(component.items)) {
+      throw Error('This case should be covered in the caller!');
+    }
+    for (key in component.items) {
+      var matcher = component.items[key];
+      split = matcher.trySplit(new_entry, data);
+      if (split !== null) {
+        delete component.items[key];
+        component.addItem(split);
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  addItem(to_add, data) {
+    var component = this.root;
+    var to_match = to_add;
+    while(true) {
+      var next = Matcher.findMatch(component, to_match);
+      if (next === null) {
+        break;
+      }
+      var length = next.matchLength(to_match);
+      
+      if (emptyObj(next.items)) {
+        var split = next.trySplit(to_match, data);
+        if (!split) {
+          throw Error('findMatch() returning non-null implies trySplit returning non-null.');
+        }
+        var key = to_match.substring(0, length);
+        delete component.items[key];
+        component.addItem(split);
+        return;
+      }
+      
+      to_match = to_match.substring(length);
+      component = next;
+    }
+
+    if (!Matcher.trySplit(component, to_match, data)) {
+      component.addItem(to_match, data);
+    }
+  }
+
+  reduceToDecisionTree() {
+    // unique length pass
+  }
+  
+  toJSON() {
+    return this.root.toJSON();
+  }
+  
+  toRegex() {
+    return this.root.toRegex();
+  }
+}
+
+class Generator {
+  static copyBooks(src, dest) {
+    for (var book in src) {
+      var src_obj = src[book];
+      dest[book] = {
+        'name': src_obj.name,
+        'long_name': src_obj.long_name,
+        'index': src_obj.index,
+        'verses': [...src_obj.verses]
+      };
+    }
+  }
+  
+  constructor(OT, NT) {
+    this.OT = {};
+    this.NT = {};
+    
+    this.matcher = new Matcher();
+    this.cases = {};
+    
+    for (var key in OT) {
+      if (!OT[key].matches) {
+        console.log(key, 'missing matches property.');
+      }
+      this.AddMatches(OT[key].matches, ['OT', key]);
+    }
+    
+    for (var key in NT) {
+      if (!NT[key].matches) {
+        console.log(key, 'missing matches property.');
+      }
+      this.AddMatches(NT[key].matches, ['NT', key]);
+    }
+    
+    Generator.copyBooks(OT, this.OT);
+    Generator.copyBooks(NT, this.NT);
+  }
+  
+  AddMatches(matches, data) {
+    var indeces = [];
+    for (var x = 0; x < matches.length; ++x) {
+      indeces.push(0);
+    }
+    
+    while(true) {
+      var parts = [];
+      for (var x = 0; x < matches.length; ++x) {
+        parts.push(matches[x][indeces[x]]);
+      }
+      
+      var to_add = parts.join(' ');
+      this.matcher.addItem(to_add, data);
+      
+      var key = `[${data[0]}, ${JSON.stringify(data[1])}]`;
+      if (key in this.cases) {
+        this.cases[key].push(to_add);
+      } else {
+        this.cases[key] = [to_add];
+      }
+      
+      for (var x = indeces.length - 1; true; --x) {
+        ++indeces[x];
+        if (indeces[x] < matches[x].length) {
+          break;
+        }
+        if (x === 0) {
+          return;
+        }
+        indeces[x] = 0;
+      }
+    }
+  }
+  
+  GenerateRegex() {
+    return this.matcher.toRegex();
+  }
+  
+  GenerateCases() {
+    var result = '';
+    for (var key in this.cases) {
+      this.cases[key].forEach(val => result += `    case ${JSON.stringify(val)}:
+`);
+      result += `      result = ${key};
+      break;
+
+`;
+    }
+    return result;
+  }
+  
+  toString() {
+    return `OT = ${JSON.stringify(this.OT, null, 2)};
+
+NT = ${JSON.stringify(this.NT, null, 2)};
+
+getBook = function(name, parts){
+  parts = (typeof parts === 'undefined' || !parts) ? false : true;
+  name = name.replace(/\\s+/g, ' ').replace(/\\. (.)/g, '.$1');
+  
+  var result;
+  switch (String(name)) {
+${this.GenerateCases()}    default:
+      throw \`unknown name: '\${name}'\`;
+  }
+  return parts ? result : result[0][result[1]];
+}
+
+getBookRegex = function(options) {
+  return new RegExp(
+      ${JSON.stringify("(^|[^a-z0-9])(" + this.GenerateRegex() + ")(?![a-z])")},
+      options);
+};`;
+    return value;
+  }
+}
+
+function log(msg) {
+  if (typeof log.console === 'undefined') {
+    log.console = document.createTextNode('');
+    document.getElementById('console').appendChild(log.console);
+  }
+  
+  log.console.appendData(msg + '\n');
+}
+
+function getTemplate(cb) {
+//  var req = new XMLHttpRequest();
+//  req.addEventListener("load", function(){
+//    cb(this.responseText);
+//  });
+//  req.open("GET", "./versification.js.in");
+//  req.send();
+  var input = document.getElementById('template');
+  setTimeout(function(){
+    cb(input.innerText);
+  }, 0);
+}
+
+function fillTemplate(template, vars) {
+  var vars_used = {};
+  for (var key in vars) {
+    vars_used[key] = 0;
+  }
+  
+  var result = template.replace(/(?<!%)%([^%]+)%/g, function(match){
+    var name = match.slice(1, -1);
+    
+    if (!name in vars) {
+      log('ERROR: unexpected key "' + key + '"');
+      return match;
+    }
+    
+    vars_used[name] += 1;
+    // Replace trailing whitespace if some of the string isn't whitespace.
+    return vars[name].replace(/(\S)\s+$/, '$1');
+  });
+  
+  for (var key in vars_used) {
+    if (vars_used[key] === 0) {
+      log('WARNING: unused key "' + key + '"');
+    }
+  }
+  
+  return result;
+}
+
+function updateVars(vars) {
+  vars['Config'] = JSON.stringify(rcvcite_versification, null, 2);
+  vars['Code'] = generateCode();
+}
+
+var generator;
+function generateCode() {
+  generator = new Generator(OT,NT);
+  return generator.toString();
+}
+
+var require_defined = [
+  ['rcvcite_versification', 'object'],
+  ['OT', 'object'],
+  ['NT', 'object'],
+  ['getBook', 'function'],
+  ['getBookRegex', 'function']
+];
+function testCode(context) {
+  var errors = 0;
+  require_defined.forEach(function(v){
+    let [name, type] = v;
+    if (!(name in context)) {
+      console.error(`'${name}' isn't defined`);
+      ++errors;
+    }
+    
+    if (typeof context[name] !== type) {
+      console.error(`'${name}' has the wrong type. Got '${typeof context[name]}' expected '${type}'. value=${context[name]}`);
+      ++errors;
+    }
+  });
+  
+  var regexp = context.getBookRegex();
+  
+  var generator = window['generator'];
+  for (var key in generator.cases) {
+    generator.cases[key].forEach(function(value){
+      let [exp_testament, exp_book] = eval(key);
+      try {
+        let [testament, book] = context.getBook(value, true);
+        if (exp_book !== book) {
+          console.error(`For '${value}': Got '${book}' expected '${exp_book}'`);
+          ++errors;
+        }
+      } catch (e) {
+        console.error(`For '${value}': Expected '${exp_book}' Got error`, e);
+        ++errors;
+      }
+      
+      try {
+        if (!regexp.test(value + ' ')) {
+          console.error(`Generated regex failed to match '${value}'`);
+          ++errors;
+        } else {
+          // console.log(`Generated regex matched '${value}'`);
+        }
+      } catch (e) {
+        console.error(e);
+        ++errors;
+      }
+    });
+  }
+  
+  if (errors > 0) {
+    console.error(`Got ${errors} errors.`);
+  }
+  
+  return errors === 0;
+}
+
+(function(){
+  var config = document.getElementById('compiler_configuration');
+  var preview = document.getElementById('preview');
+  var preview_text = document.createTextNode('');
+  var test_button = document.getElementById('test');
+  
+  var default_vars = {'Year': '2020', 'Config': '{\'Version\': 0}', 'Code': '// TODO'};
+  
+  preview.appendChild(preview_text);
+  
+  config.onsubmit = function(){
+    getTemplate(function(content){
+      updateVars(default_vars);
+      preview_text.nodeValue = fillTemplate(content, default_vars);
+    });
+  };
+
+  test_button.onclick = function(){
+    if (preview_text.nodeValue === '') {
+      config.onsubmit();
+      console.log('Calling config.submit()');
+    }
+    
+    var script = document.getElementById('preview_test');
+    if (script) {
+      script.parentNode.removeChild(script);
+      console.log('Recreating Script...');
+    }
+    
+    setTimeout(function(){
+      script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.id = 'preview_test';
+      var code = `(function(){
+${preview_text.nodeValue}
+var context = {};
+require_defined.forEach(function(v){
+  let [name, type] = v;
+  try {
+    context[name] = eval(name);
+  } catch(e) {
+    console.error(\`'\${name}' isn't defined\`);
+  }
+});
+testCode(context);
+})();`;
+      try {
+        script.appendChild(document.createTextNode(code));
+      } catch (e) {
+        script.text = code;
+      } finally {
+        document.body.appendChild(script);
+      }
+      console.log('Script added.');
+    }, 0);
+  };
+})();
+
+</script>
+  </body>
+</html>

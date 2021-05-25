@@ -1,0 +1,84 @@
+/*http://rcvcite.net/
+
+The MIT License (MIT)
+
+Copyright (c) 2013 RcVCite
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.*/
+
+span.rcvc_verse_ref{
+    display: inline;
+    color: blue;
+    cursor: pointer;
+}
+span.rcvc_verse_ref:hover{
+    color: darkblue;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay{
+    color: #004;
+    background-color: #BBF;
+    border: 1px solid #AAE;
+    padding: 0.188em 0.313em;
+    position: absolute;
+    left: 0;
+    margin: 0px;
+    max-width: 75%;
+    cursor: auto;
+    box-shadow: 0.188em 0.188em 0.188em rgba(0,0,0,.25);
+    z-index: 9999;
+    font-weight: normal;
+    text-align: left;
+    text-indent: 0px;
+    line-height: normal;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay span.rcvc_ref{
+    font-weight: bold;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay div.rcvc_copyright{
+    text-align: center;
+    vertical-align: top;
+    margin: 0.3em 5.8em 0 0;
+    padding: 0;
+    font-size: 0.6em; 
+    color: #448;
+    text-decoration: none;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay div.rcvc_verse_overlay_links{
+    position: absolute;
+    font-size: 0.8em;
+    background-color: rgba(187,187,255,0.2);
+    bottom: 0.188em;
+    right: 0.313em;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay div.rcvc_verse_overlay_links a{
+    color: blue;
+}
+span.rcvc_verse_ref div.rcvc_verse_overlay div.rcvc_verse_overlay_links a:hover{
+    color: darkblue;
+    background-color: rgba(187,187,255,0.8);
+}
+
+@media screen and (max-width: 600px), screen and (max-device-width: 600px) {
+    span.rcvc_verse_ref div.rcvc_verse_overlay{
+        max-width: none;
+    }
+}

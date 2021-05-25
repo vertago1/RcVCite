@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<!--The MIT License (MIT)
+
+Copyright (c) 2020 RcVCite
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<html>
+  <head>
+    <title>Performance Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="versification_en_precomp.js"></script>
+  </head>
+  <body>>
+<pre style="color: red;" id="console"></pre>
+<script>
+
+
+getBook_old = function(name,parts){
+  parts=(typeof parts==='undefined' || !parts)?false:true;
+  name=name.replace('.','').toUpperCase();
+  switch(name.charAt(0)){
+    case '1': //First
+      return getBook123(name.replace(/^1\s*/,''),1,parts);
+    case '2': //Second
+      return getBook123(name.replace(/^2\s*/,''),2,parts);
+    case '3': //3 John NT[24]
+      return parts?[NT,'3 John']:NT['3 John'];//getBook123(name.replace(/[^\s]+\s+/,''),3);
+    case 'A':
+      if(name.charAt(1)==='C')//Acts NT[4]
+        return parts?[NT,'Acts']:NT['Acts'];
+      else //Amos OT[29]
+        return parts?[OT,'Amos']:OT['Amos'];
+    case 'C': //Colossians NT[11]
+      return parts?[NT,'Col.']:NT['Col.'];
+    case 'D':
+      if(name.charAt(2)==='N'||name.charAt(1)==='N')//Daniel OT[26]
+        return parts?[OT,'Dan.']:OT['Dan.'];
+      else //Deuteronomy OT[4]
+        return parts?[OT,'Deut.']:OT['Deut.'];
+    case 'E':
+      switch(name.charAt(1)){
+        case 'C': //Ecclesiastes OT[20]
+          return parts?[OT,'Eccl.']:OT['Eccl.'];
+        case 'P': //Ephesians NT[9]
+          return parts?[NT,'Eph.']:NT['Eph.'];
+        case 'S': //Esther OT[16]
+          return parts?[OT,'Esth.']:OT['Esth.'];
+        case 'X': //Exodus OT[1]
+          return parts?[OT,'Exo.']:OT['Exo.'];
+        case 'Z':
+          if(name.charAt(2)==='R')//Ezra OT[14]
+            return parts?[OT,'Ezra']:OT['Ezra'];
+          else //Ezekiel OT[25]
+            return parts?[OT,'Ezek.']:OT['Ezek.'];
+      }
+    case 'F': //First
+      return getBook123(name.replace(/[^\s]+\s+/,''),1,parts);
+    case 'G':
+      if(name.charAt(1)==='A')//Galatians NT[8]
+        return parts?[NT,'Gal.']:NT['Gal.'];
+      else //Genesis OT[0]
+        return parts?[OT,'Gen.']:OT['Gen.'];
+    case 'H':
+      if(name.charAt(1)==='E')//Hebrews NT[18]
+        return parts?[NT,'Heb.']:NT['Heb.'];
+      else if(name.charAt(1)==='O')//Hosea OT[27]
+        return parts?[OT,'Hosea']:OT['Hosea'];
+      else if(name.charAt(2)==='B'||name.charAt(1)==='B')//Habakkuk OT[34]
+        return parts?[OT,'Hab.']:OT['Hab.'];
+      else //Haggai OT[36]
+        return parts?[OT,'Hag.']:OT['Hag.'];
+    case 'I':
+      if (name.charAt(1)==='S') //Isaiah OT[22]
+        return parts?[OT,'Isa.']:OT['Isa.'];
+      else if(name.charAt(1)==='I') { //Roman Numeral
+        if(name.charAt(2)==='I') {
+          return parts?[NT,'3 John']:NT['3 John'];
+        } else {
+          return getBook123(name.replace(/^II\s*/,''),2,parts);
+        }
+      } else
+        return getBook123(name.replace(/^I\s*/,''),1,parts);
+    case 'J':
+      switch(name.charAt(1)){
+        case 'A': //James NT[19]
+          return parts?[NT,'James']:NT['James'];
+        case 'B': //Jb\\. Job OT[17]
+          return parts?[OT,'Job']:OT['Job'];
+        case 'D': //Jds\\. Judges OT[6]
+          return parts?[OT,'Judg.']:OT['Judg.'];
+        case 'E': //Jeremiah OT[23]
+          return parts?[OT,'Jer.']:OT['Jer.'];
+        case 'L': //Jl\\. Joel OT[29]
+          return parts?[OT,'Joel']:OT['Joel'];
+        case 'N': //Jn\\. John NT[3]
+          return parts?[NT,'John']:NT['John'];
+        case 'O':
+          switch(name.charAt(2)){
+            case 'B': //Job OT[17]
+              return parts?[OT,'Job']:OT['Job'];
+            case 'E': //Joel OT[29]
+              return parts?[OT,'Joel']:OT['Joel'];
+            case 'H': //John NT[3]
+              return parts?[NT,'John']:NT['John'];
+            case 'N': //Jonah OT[31]
+              return parts?[OT,'Jonah']:OT['Jonah'];
+            default: //Joshua OT[5]
+              return parts?[OT,'Josh.']:OT['Josh.'];
+          }
+        case 'U':
+          if(name.charAt(3)==='E')//Jude NT[25]
+            return parts?[NT,'Jude']:NT['Jude'];
+          else //Judges OT[6]
+            return parts?[OT,'Judg.']:OT['Judg.'];
+      }
+    case 'L':
+      if(name.charAt(1)==='A')//Lamentations OT[24]
+        return parts?[OT,'Lam.']:OT['Lam.'];
+      else if(name.charAt(2)==='K'||name.charAt(1)==='K')//Luke NT[2]
+        return parts?[NT,'Luke']:NT['Luke'];
+      else //Leviticus OT[2]
+        return parts?[OT,'Lev.']:OT['Lev.'];
+    case 'M':
+      if(name.charAt(1)==='I')//Micah OT[32]
+        return parts?[OT,'Micah']:OT['Micah'];
+      else if(name.charAt(2)==='L')//Malachi OT[38]
+        return parts?[OT,'Mal.']:OT['Mal.'];
+      else if(name.charAt(2)==='T'||name.charAt(1)==='T')//Matthew NT[0]
+        return parts?[NT,'Matt.']:NT['Matt.'];
+      else //Mark NT[1]
+        return parts?[NT,'Mark']:NT['Mark'];
+    case 'N':
+      if(name.charAt(1)==='E')//Nehemiah OT[15]
+        return parts?[OT,'Neh.']:OT['Neh.'];
+      else if(name.charAt(1)==='A')//Nahum OT[33]
+        return parts?[OT,'Nahum']:OT['Nahum'];
+      else //Numbers OT[3]
+        return parts?[OT,'Num.']:OT['Num.'];
+    case 'O': //Obadiah OT[30]
+      return parts?[OT,'Oba.']:OT['Oba.'];
+    case 'P':
+      if(name.charAt(1)==='H'){
+        if(name.charAt(5)==='M'||name.charAt(4)==='M')//Philemon NT[17]
+          return parts?[NT,'Philem.']:NT['Philem.'];
+        else //Philippians NT[10]
+          return parts?[NT,'Phil.']:NT['Phil.'];
+      } else if(name.charAt(1)==='R')//Proverbs OT[19]
+        return parts?[OT,'Prov.']:OT['Prov.'];
+      else //Psalms OT[18]
+        return parts?[OT,'Psa.']:OT['Psa.'];
+    case 'R':
+      if(name.charAt(1)==='O') //Romans NT[5]
+        return parts?[NT,'Rom.']:NT['Rom.'];
+      else if(name.charAt(1)==='U') //Ruth OT[7]
+        return parts?[OT,'Ruth']:OT['Ruth'];
+      else //Revelation NT[26]
+        return parts?[NT,'Rev.']:NT['Rev.'];
+    case 'S':
+      if(name.charAt(1)==='E')//Second
+        return getBook123(name.replace(/^Second\s*/i,''),2,parts);
+      else //Song of Songs OT[21]
+        return parts?[OT,'S.S.']:OT['S.S.'];
+    case 'T':
+      if(name.charAt(1)==='H') //Third John NT[24]
+        return parts?[NT,'3 John']:NT['3 John'];//getBook123(name.replace(/[^\s]+\s+/,''),3);
+      else //Titus NT[16]
+        return parts?[NT,'Titus']:NT['Titus'];
+    case 'Z':
+      if(name.charAt(2)==='C') //Zechariah OT[37]
+        return parts?[OT,'Zech.']:OT['Zech.'];
+      else //Zephaniah OT[35]
+        return parts?[OT,'Zeph.']:OT['Zeph.'];
+  }
+};
+
+function getBook123(name,number,parts){
+  parts=(typeof parts==='undefined' || !parts)?false:true;
+  name.replace('.','');
+  name.toUpperCase();
+  switch(name.charAt(0)){
+    case 'C':
+      if(name.charAt(1)==='H'){//Chronicles OT[12,13]
+        return parts?[OT,number+' Chron.']:OT[number+' Chron.'];
+      } else { //Corinthians NT[6,7]
+        return parts?[NT,number+' Cor.']:NT[number+' Cor.'];
+      }
+    case 'J': //John NT[22,23,24]
+      return parts?[NT,number+' John']:NT[number+' John'];
+    case 'K': //Kings OT[10,11]
+      return parts?[OT,number+' Kings']:OT[number+' Kings'];
+    case 'P': //Peter NT[20,21]
+      return parts?[NT,number+' Pet.']:NT[number+' Pet.'];
+    case 'S': //Samuel OT[8,9]
+      return parts?[OT,number+' Sam.']:OT[number+' Sam.'];
+    case 'T': //Thessolonains NT[12,13],Timothy NT[14,15]
+      if(name.charAt(1)==='H')
+        return parts?[NT,number+' Thes.']:NT[number+' Thes.'];
+      else
+        return parts?[NT,number+' Tim.']:NT[number+' Tim.'];
+  }
+}
+
+//fix order issues with regular expression
+getBookRegex_old = function(options){
+  var layer1=[], layer2=[], layer3=[];
+  var count=0;
+  for(var abrev in OT){
+    switch(count){
+      case 21: //S.S. -> pSS., theSSolonians
+      //case 22: //Isaiah -> genesIS
+      //case 25: //Ezekiel -> EZra
+      case 29: //Amos -> lAMentations, jAMes
+      //case 30: //Obadiah -> jOB
+      //case 32: //Michah -> jereMIah, neheMIah
+      //case 33: //Nahum -> joNA
+        layer2.push(OT[abrev].regex);
+        break;
+      case 5: //Joshua -> JOhn -> 1 JOHN
+        layer3.push(OT[abrev].regex);
+        break;
+      default:
+        layer1.push(OT[abrev].regex);
+        break;
+    }
+    count++;
+  }
+  count=0;
+  for(var abrev in NT){
+    switch(count){
+      case 3: //John -> 1 JOHN
+      //case 9: //Ephesians -> zEPH
+      case 10: //Philipians -> PHILemon
+      case 16: //Titus -> revelaTIon
+        layer2.push(NT[abrev].regex);
+        break;
+      default:
+        layer1.push(NT[abrev].regex);
+        break;
+    }
+    count++;
+  }
+  var str="(^|[^a-z0-9])("+layer1.join('|')+'|'+layer2.join('|')+'|'+layer3.join('|')+")(?![a-z])";
+  return new RegExp(str,options);
+};
+
+
+var getBook_new = function(name, parts){
+  parts = (typeof parts === 'undefined' || !parts) ? false : true;
+  name = name.replace(/\s+/g, ' ').replace(/\. (.)/g, '.$1');
+  
+  var result;
+  switch (String(name)) {
+    case "GN.":
+    case "Gn.":
+    case "GEN.":
+    case "Gen.":
+    case "GENESIS":
+    case "Genesis":
+      result = [OT, "Gen."];
+      break;
+
+    case "EX.":
+    case "Ex.":
+    case "EXO.":
+    case "Exo.":
+    case "EXOD.":
+    case "Exod.":
+    case "EXODUS":
+    case "Exodus":
+      result = [OT, "Exo."];
+      break;
+
+    case "LV.":
+    case "Lv.":
+    case "LEV.":
+    case "Lev.":
+    case "LEVITICUS":
+    case "Leviticus":
+      result = [OT, "Lev."];
+      break;
+
+    case "NM.":
+    case "Nm.":
+    case "NUM.":
+    case "Num.":
+    case "NUMBERS":
+    case "Numbers":
+      result = [OT, "Num."];
+      break;
+
+    case "DT.":
+    case "Dt.":
+    case "DEUT.":
+    case "Deut.":
+    case "DUETERONOMY":
+    case "Deuteronomy":
+      result = [OT, "Deut."];
+      break;
+
+    case "JO.":
+    case "Jo.":
+    case "JOSH.":
+    case "Josh.":
+    case "JOSHUA":
+    case "Joshua":
+      result = [OT, "Josh."];
+      break;
+
+    case "JDS.":
+    case "Jds.":
+    case "JUDG.":
+    case "Judg.":
+    case "JUDGES":
+    case "Judges":
+      result = [OT, "Judg."];
+      break;
+
+    case "RU.":
+    case "Ru.":
+    case "RUTH":
+    case "Ruth":
+      result = [OT, "Ruth"];
+      break;
+
+    case "1 SM.":
+    case "1 Sm.":
+    case "1 SAM.":
+    case "1 Sam.":
+    case "1 SAMUEL":
+    case "1 Samuel":
+    case "i SM.":
+    case "i Sm.":
+    case "i SAM.":
+    case "i Sam.":
+    case "i SAMUEL":
+    case "i Samuel":
+    case "I SM.":
+    case "I Sm.":
+    case "I SAM.":
+    case "I Sam.":
+    case "I SAMUEL":
+    case "I Samuel":
+    case "FIRST SM.":
+    case "FIRST Sm.":
+    case "FIRST SAM.":
+    case "FIRST Sam.":
+    case "FIRST SAMUEL":
+    case "FIRST Samuel":
+    case "First SM.":
+    case "First Sm.":
+    case "First SAM.":
+    case "First Sam.":
+    case "First SAMUEL":
+    case "First Samuel":
+    case "first SM.":
+    case "first Sm.":
+    case "first SAM.":
+    case "first Sam.":
+    case "first SAMUEL":
+    case "first Samuel":
+      result = [OT, "1 Sam."];
+      break;
+
+    case "2 SM.":
+    case "2 Sm.":
+    case "2 SAM.":
+    case "2 Sam.":
+    case "2 SAMUEL":
+    case "2 Samuel":
+    case "ii SM.":
+    case "ii Sm.":
+    case "ii SAM.":
+    case "ii Sam.":
+    case "ii SAMUEL":
+    case "ii Samuel":
+    case "II SM.":
+    case "II Sm.":
+    case "II SAM.":
+    case "II Sam.":
+    case "II SAMUEL":
+    case "II Samuel":
+    case "SECOND SM.":
+    case "SECOND Sm.":
+    case "SECOND SAM.":
+    case "SECOND Sam.":
+    case "SECOND SAMUEL":
+    case "SECOND Samuel":
+    case "Second SM.":
+    case "Second Sm.":
+    case "Second SAM.":
+    case "Second Sam.":
+    case "Second SAMUEL":
+    case "Second Samuel":
+    case "second SM.":
+    case "second Sm.":
+    case "second SAM.":
+    case "second Sam.":
+    case "second SAMUEL":
+    case "second Samuel":
+      result = [OT, "2 Sam."];
+      break;
+
+    case "1 KGS.":
+    case "1 Kgs.":
+    case "1 KINGS":
+    case "1 Kings":
+    case "i KGS.":
+    case "i Kgs.":
+    case "i KINGS":
+    case "i Kings":
+    case "I KGS.":
+    case "I Kgs.":
+    case "I KINGS":
+    case "I Kings":
+    case "FIRST KGS.":
+    case "FIRST Kgs.":
+    case "FIRST KINGS":
+    case "FIRST Kings":
+    case "First KGS.":
+    case "First Kgs.":
+    case "First KINGS":
+    case "First Kings":
+    case "first KGS.":
+    case "first Kgs.":
+    case "first KINGS":
+    case "first Kings":
+      result = [OT, "1 Kings"];
+      break;
+
+    case "2 KGS.":
+    case "2 Kgs.":
+    case "2 KINGS":
+    case "2 Kings":
+    case "ii KGS.":
+    case "ii Kgs.":
+    case "ii KINGS":
+    case "ii Kings":
+    case "II KGS.":
+    case "II Kgs.":
+    case "II KINGS":
+    case "II Kings":
+    case "SECOND KGS.":
+    case "SECOND Kgs.":
+    case "SECOND KINGS":
+    case "SECOND Kings":
+    case "Second KGS.":
+    case "Second Kgs.":
+    case "Second KINGS":
+    case "Second Kings":
+    case "second KGS.":
+    case "second Kgs.":
+    case "second KINGS":
+    case "second Kings":
+      result = [OT, "2 Kings"];
+      break;
+
+    case "1 CHR.":
+    case "1 Chr.":
+    case "1 CHRON.":
+    case "1 Chron.":
+    case "1 CHRONICLES":
+    case "1 Chronicles":
+    case "i CHR.":
+    case "i Chr.":
+    case "i CHRON.":
+    case "i Chron.":
+    case "i CHRONICLES":
+    case "i Chronicles":
+    case "I CHR.":
+    case "I Chr.":
+    case "I CHRON.":
+    case "I Chron.":
+    case "I CHRONICLES":
+    case "I Chronicles":
+    case "FIRST CHR.":
+    case "FIRST Chr.":
+    case "FIRST CHRON.":
+    case "FIRST Chron.":
+    case "FIRST CHRONICLES":
+    case "FIRST Chronicles":
+    case "First CHR.":
+    case "First Chr.":
+    case "First CHRON.":
+    case "First Chron.":
+    case "First CHRONICLES":
+    case "First Chronicles":
+    case "first CHR.":
+    case "first Chr.":
+    case "first CHRON.":
+    case "first Chron.":
+    case "first CHRONICLES":
+    case "first Chronicles":
+      result = [OT, "1 Chron."];
+      break;
+
+    case "2 CHR.":
+    case "2 Chr.":
+    case "2 CHRON.":
+    case "2 Chron.":
+    case "2 CHRONICLES":
+    case "2 Chronicles":
+    case "ii CHR.":
+    case "ii Chr.":
+    case "ii CHRON.":
+    case "ii Chron.":
+    case "ii CHRONICLES":
+    case "ii Chronicles":
+    case "II CHR.":
+    case "II Chr.":
+    case "II CHRON.":
+    case "II Chron.":
+    case "II CHRONICLES":
+    case "II Chronicles":
+    case "SECOND CHR.":
+    case "SECOND Chr.":
+    case "SECOND CHRON.":
+    case "SECOND Chron.":
+    case "SECOND CHRONICLES":
+    case "SECOND Chronicles":
+    case "Second CHR.":
+    case "Second Chr.":
+    case "Second CHRON.":
+    case "Second Chron.":
+    case "Second CHRONICLES":
+    case "Second Chronicles":
+    case "second CHR.":
+    case "second Chr.":
+    case "second CHRON.":
+    case "second Chron.":
+    case "second CHRONICLES":
+    case "second Chronicles":
+      result = [OT, "2 Chron."];
+      break;
+
+    case "EZR.":
+    case "Ezr.":
+    case "EZRA":
+    case "Ezra":
+      result = [OT, "Ezra"];
+      break;
+
+    case "NEH.":
+    case "Neh.":
+    case "NEHEMIAH":
+    case "Nehemiah":
+      result = [OT, "Neh."];
+      break;
+
+    case "EST.":
+    case "Est.":
+    case "ESTH.":
+    case "Esth.":
+    case "ESTHER":
+    case "Esther":
+      result = [OT, "Esth."];
+      break;
+
+    case "JB.":
+    case "Jb.":
+    case "JOB":
+    case "Job":
+      result = [OT, "Job"];
+      break;
+
+    case "PS.":
+    case "Ps.":
+    case "PSS.":
+    case "Pss.":
+    case "PSA.":
+    case "Psa.":
+    case "PSALM":
+    case "Psalm":
+    case "PSALMS":
+    case "Psalms":
+      result = [OT, "Psa."];
+      break;
+
+    case "PRV.":
+    case "Prv.":
+    case "PROV.":
+    case "Prov.":
+    case "PROVERBS":
+    case "Proverbs":
+      result = [OT, "Prov."];
+      break;
+
+    case "ECCL.":
+    case "Eccl.":
+    case "ECCLES.":
+    case "Eccles.":
+    case "ECCLESIASTES":
+    case "Ecclesiastes":
+      result = [OT, "Eccl."];
+      break;
+
+    case "SONG OF SOLOMON":
+    case "SONG OF SONGS":
+    case "SONG OF SOL.":
+    case "Song of Solomon":
+    case "Song of Songs":
+    case "Song of Sol.":
+    case "SG.":
+    case "Sg.":
+    case "S.S.":
+      result = [OT, "S.S."];
+      break;
+
+    case "IS.":
+    case "Is.":
+    case "ISA.":
+    case "Isa.":
+    case "ISAIAH":
+    case "Isaiah":
+      result = [OT, "Isa."];
+      break;
+
+    case "JER.":
+    case "Jer.":
+    case "JEREMIAH":
+    case "Jeremiah":
+      result = [OT, "Jer."];
+      break;
+
+    case "LAM.":
+    case "Lam.":
+    case "LAMENTATIONS":
+    case "Lamentations":
+      result = [OT, "Lam."];
+      break;
+
+    case "EZ.":
+    case "Ez.":
+    case "EZEK.":
+    case "Ezek.":
+    case "EZEKIEL":
+    case "Ezekiel":
+      result = [OT, "Ezek."];
+      break;
+
+    case "DN.":
+    case "Dn.":
+    case "DAN.":
+    case "Dan.":
+    case "DANIEL":
+    case "Daniel":
+      result = [OT, "Dan."];
+      break;
+
+    case "HOS.":
+    case "Hos.":
+    case "HOSEA":
+    case "Hosea":
+      result = [OT, "Hosea"];
+      break;
+
+    case "JL.":
+    case "Jl.":
+    case "JOEL":
+    case "Joel":
+      result = [OT, "Joel"];
+      break;
+
+    case "AM.":
+    case "Am.":
+    case "AMOS":
+    case "Amos":
+      result = [OT, "Amos"];
+      break;
+
+    case "OB.":
+    case "Ob.":
+    case "OBA.":
+    case "Oba.":
+    case "OBAD.":
+    case "Obad.":
+    case "OBADIAH":
+    case "Obadiah":
+      result = [OT, "Oba."];
+      break;
+
+    case "JON.":
+    case "Jon.":
+    case "JONAH":
+    case "Jonah":
+      result = [OT, "Jonah"];
+      break;
+
+    case "MIC.":
+    case "Mic.":
+    case "MICAH":
+    case "Micah":
+      result = [OT, "Micah"];
+      break;
+
+    case "NAH.":
+    case "Nah.":
+    case "NAHUM":
+    case "Nahum":
+      result = [OT, "Nahum"];
+      break;
+
+    case "HB.":
+    case "Hb.":
+    case "HAB.":
+    case "Hab.":
+    case "HABAKKUK, Habakkuk":
+      result = [OT, "Hab."];
+      break;
+
+    case "ZEPH.":
+    case "Zeph.":
+    case "ZEPHANIAH":
+    case "Zephaniah":
+      result = [OT, "Zeph."];
+      break;
+
+    case "HG.":
+    case "Hg.":
+    case "HAG.":
+    case "Hag.":
+    case "HAGGAI":
+    case "Haggai":
+      result = [OT, "Hag."];
+      break;
+
+    case "ZECH.":
+    case "Zech.":
+    case "ZECHARIAH":
+    case "Zechariah":
+      result = [OT, "Zech."];
+      break;
+
+    case "MAL.":
+    case "Mal.":
+    case "MALACHI":
+    case "Malachi":
+      result = [OT, "Mal."];
+      break;
+
+    case "MT.":
+    case "Mt.":
+    case "MATT.":
+    case "Matt.":
+    case "MATTHEW":
+    case "Matthew":
+      result = [NT, "Matt."];
+      break;
+
+    case "MK.":
+    case "Mk.":
+    case "MARK":
+    case "Mark":
+      result = [NT, "Mark"];
+      break;
+
+    case "LK.":
+    case "Lk.":
+    case "LUKE":
+    case "Luke":
+      result = [NT, "Luke"];
+      break;
+
+    case "JN.":
+    case "Jn.":
+    case "JOHN":
+    case "John":
+      result = [NT, "John"];
+      break;
+
+    case "ACTS":
+    case "Acts":
+      result = [NT, "Acts"];
+      break;
+
+    case "ROM.":
+    case "Rom.":
+    case "ROMANS":
+    case "Romans":
+      result = [NT, "Rom."];
+      break;
+
+    case "1 COR.":
+    case "1 Cor.":
+    case "1 CORINTHIANS":
+    case "1 Corinthians":
+    case "i COR.":
+    case "i Cor.":
+    case "i CORINTHIANS":
+    case "i Corinthians":
+    case "I COR.":
+    case "I Cor.":
+    case "I CORINTHIANS":
+    case "I Corinthians":
+    case "FIRST COR.":
+    case "FIRST Cor.":
+    case "FIRST CORINTHIANS":
+    case "FIRST Corinthians":
+    case "First COR.":
+    case "First Cor.":
+    case "First CORINTHIANS":
+    case "First Corinthians":
+    case "first COR.":
+    case "first Cor.":
+    case "first CORINTHIANS":
+    case "first Corinthians":
+      result = [NT, "1 Cor."];
+      break;
+
+    case "2 COR.":
+    case "2 Cor.":
+    case "2 CORINTHIANS":
+    case "2 Corinthians":
+    case "ii COR.":
+    case "ii Cor.":
+    case "ii CORINTHIANS":
+    case "ii Corinthians":
+    case "II COR.":
+    case "II Cor.":
+    case "II CORINTHIANS":
+    case "II Corinthians":
+    case "SECOND COR.":
+    case "SECOND Cor.":
+    case "SECOND CORINTHIANS":
+    case "SECOND Corinthians":
+    case "Second COR.":
+    case "Second Cor.":
+    case "Second CORINTHIANS":
+    case "Second Corinthians":
+    case "second COR.":
+    case "second Cor.":
+    case "second CORINTHIANS":
+    case "second Corinthians":
+      result = [NT, "2 Cor."];
+      break;
+
+    case "GAL.":
+    case "Gal.":
+    case "GALATIANS":
+    case "Galatians":
+      result = [NT, "Gal."];
+      break;
+
+    case "EPH.":
+    case "Eph.":
+    case "EPHESIANS":
+    case "Ephesians":
+      result = [NT, "Eph."];
+      break;
+
+    case "PHIL.":
+    case "Phil.":
+    case "PHILIPPIANS":
+    case "Philippians":
+      result = [NT, "Phil."];
+      break;
+
+    case "COL.":
+    case "Col.":
+    case "COLOSSIANS":
+    case "Colossians":
+      result = [NT, "Col."];
+      break;
+
+    case "1 THES.":
+    case "1 Thes.":
+    case "1 THESS.":
+    case "1 Thess.":
+    case "1 THESSALONIANS":
+    case "1 Thessalonians":
+    case "i THES.":
+    case "i Thes.":
+    case "i THESS.":
+    case "i Thess.":
+    case "i THESSALONIANS":
+    case "i Thessalonians":
+    case "I THES.":
+    case "I Thes.":
+    case "I THESS.":
+    case "I Thess.":
+    case "I THESSALONIANS":
+    case "I Thessalonians":
+    case "FIRST THES.":
+    case "FIRST Thes.":
+    case "FIRST THESS.":
+    case "FIRST Thess.":
+    case "FIRST THESSALONIANS":
+    case "FIRST Thessalonians":
+    case "First THES.":
+    case "First Thes.":
+    case "First THESS.":
+    case "First Thess.":
+    case "First THESSALONIANS":
+    case "First Thessalonians":
+    case "first THES.":
+    case "first Thes.":
+    case "first THESS.":
+    case "first Thess.":
+    case "first THESSALONIANS":
+    case "first Thessalonians":
+      result = [NT, "1 Thes."];
+      break;
+
+    case "2 THES.":
+    case "2 Thes.":
+    case "2 THESS.":
+    case "2 Thess.":
+    case "2 THESSALONIANS":
+    case "2 Thessalonians":
+    case "ii THES.":
+    case "ii Thes.":
+    case "ii THESS.":
+    case "ii Thess.":
+    case "ii THESSALONIANS":
+    case "ii Thessalonians":
+    case "II THES.":
+    case "II Thes.":
+    case "II THESS.":
+    case "II Thess.":
+    case "II THESSALONIANS":
+    case "II Thessalonians":
+    case "SECOND THES.":
+    case "SECOND Thes.":
+    case "SECOND THESS.":
+    case "SECOND Thess.":
+    case "SECOND THESSALONIANS":
+    case "SECOND Thessalonians":
+    case "Second THES.":
+    case "Second Thes.":
+    case "Second THESS.":
+    case "Second Thess.":
+    case "Second THESSALONIANS":
+    case "Second Thessalonians":
+    case "second THES.":
+    case "second Thes.":
+    case "second THESS.":
+    case "second Thess.":
+    case "second THESSALONIANS":
+    case "second Thessalonians":
+      result = [NT, "2 Thes."];
+      break;
+
+    case "1 TM.":
+    case "1 Tm.":
+    case "1 TIM.":
+    case "1 Tim.":
+    case "1 TIMOTHY":
+    case "1 Timothy":
+    case "i TM.":
+    case "i Tm.":
+    case "i TIM.":
+    case "i Tim.":
+    case "i TIMOTHY":
+    case "i Timothy":
+    case "I TM.":
+    case "I Tm.":
+    case "I TIM.":
+    case "I Tim.":
+    case "I TIMOTHY":
+    case "I Timothy":
+    case "FIRST TM.":
+    case "FIRST Tm.":
+    case "FIRST TIM.":
+    case "FIRST Tim.":
+    case "FIRST TIMOTHY":
+    case "FIRST Timothy":
+    case "First TM.":
+    case "First Tm.":
+    case "First TIM.":
+    case "First Tim.":
+    case "First TIMOTHY":
+    case "First Timothy":
+    case "first TM.":
+    case "first Tm.":
+    case "first TIM.":
+    case "first Tim.":
+    case "first TIMOTHY":
+    case "first Timothy":
+      result = [NT, "1 Tim."];
+      break;
+
+    case "2 TM.":
+    case "2 Tm.":
+    case "2 TIM.":
+    case "2 Tim.":
+    case "2 TIMOTHY":
+    case "2 Timothy":
+    case "ii TM.":
+    case "ii Tm.":
+    case "ii TIM.":
+    case "ii Tim.":
+    case "ii TIMOTHY":
+    case "ii Timothy":
+    case "II TM.":
+    case "II Tm.":
+    case "II TIM.":
+    case "II Tim.":
+    case "II TIMOTHY":
+    case "II Timothy":
+    case "SECOND TM.":
+    case "SECOND Tm.":
+    case "SECOND TIM.":
+    case "SECOND Tim.":
+    case "SECOND TIMOTHY":
+    case "SECOND Timothy":
+    case "Second TM.":
+    case "Second Tm.":
+    case "Second TIM.":
+    case "Second Tim.":
+    case "Second TIMOTHY":
+    case "Second Timothy":
+    case "second TM.":
+    case "second Tm.":
+    case "second TIM.":
+    case "second Tim.":
+    case "second TIMOTHY":
+    case "second Timothy":
+      result = [NT, "2 Tim."];
+      break;
+
+    case "TI.":
+    case "Ti.":
+    case "TITUS":
+    case "Titus":
+      result = [NT, "Titus"];
+      break;
+
+    case "PHILM.":
+    case "Philm.":
+    case "PHILEM.":
+    case "Philem.":
+    case "PHILEMON":
+    case "Philemon":
+      result = [NT, "Philem."];
+      break;
+
+    case "HEB.":
+    case "Heb.":
+    case "HEBREWS":
+    case "Hebrews":
+      result = [NT, "Heb."];
+      break;
+
+    case "JA.":
+    case "Ja.":
+    case "JAS.":
+    case "Jas.":
+    case "JAMES":
+    case "James":
+      result = [NT, "James"];
+      break;
+
+    case "1 PT.":
+    case "1 Pt.":
+    case "1 PET.":
+    case "1 Pet.":
+    case "1 PETER":
+    case "1 Peter":
+    case "i PT.":
+    case "i Pt.":
+    case "i PET.":
+    case "i Pet.":
+    case "i PETER":
+    case "i Peter":
+    case "I PT.":
+    case "I Pt.":
+    case "I PET.":
+    case "I Pet.":
+    case "I PETER":
+    case "I Peter":
+    case "FIRST PT.":
+    case "FIRST Pt.":
+    case "FIRST PET.":
+    case "FIRST Pet.":
+    case "FIRST PETER":
+    case "FIRST Peter":
+    case "First PT.":
+    case "First Pt.":
+    case "First PET.":
+    case "First Pet.":
+    case "First PETER":
+    case "First Peter":
+    case "first PT.":
+    case "first Pt.":
+    case "first PET.":
+    case "first Pet.":
+    case "first PETER":
+    case "first Peter":
+      result = [NT, "1 Pet."];
+      break;
+
+    case "2 PT.":
+    case "2 Pt.":
+    case "2 PET.":
+    case "2 Pet.":
+    case "2 PETER":
+    case "2 Peter":
+    case "ii PT.":
+    case "ii Pt.":
+    case "ii PET.":
+    case "ii Pet.":
+    case "ii PETER":
+    case "ii Peter":
+    case "II PT.":
+    case "II Pt.":
+    case "II PET.":
+    case "II Pet.":
+    case "II PETER":
+    case "II Peter":
+    case "SECOND PT.":
+    case "SECOND Pt.":
+    case "SECOND PET.":
+    case "SECOND Pet.":
+    case "SECOND PETER":
+    case "SECOND Peter":
+    case "Second PT.":
+    case "Second Pt.":
+    case "Second PET.":
+    case "Second Pet.":
+    case "Second PETER":
+    case "Second Peter":
+    case "second PT.":
+    case "second Pt.":
+    case "second PET.":
+    case "second Pet.":
+    case "second PETER":
+    case "second Peter":
+      result = [NT, "2 Pet."];
+      break;
+
+    case "1 JN.":
+    case "1 Jn.":
+    case "1 JOHN":
+    case "1 John":
+    case "i JN.":
+    case "i Jn.":
+    case "i JOHN":
+    case "i John":
+    case "I JN.":
+    case "I Jn.":
+    case "I JOHN":
+    case "I John":
+    case "FIRST JN.":
+    case "FIRST Jn.":
+    case "FIRST JOHN":
+    case "FIRST John":
+    case "First JN.":
+    case "First Jn.":
+    case "First JOHN":
+    case "First John":
+    case "first JN.":
+    case "first Jn.":
+    case "first JOHN":
+    case "first John":
+      result = [NT, "1 John"];
+      break;
+
+    case "2 JN.":
+    case "2 Jn.":
+    case "2 JOHN":
+    case "2 John":
+    case "ii JN.":
+    case "ii Jn.":
+    case "ii JOHN":
+    case "ii John":
+    case "II JN.":
+    case "II Jn.":
+    case "II JOHN":
+    case "II John":
+    case "SECOND JN.":
+    case "SECOND Jn.":
+    case "SECOND JOHN":
+    case "SECOND John":
+    case "Second JN.":
+    case "Second Jn.":
+    case "Second JOHN":
+    case "Second John":
+    case "second JN.":
+    case "second Jn.":
+    case "second JOHN":
+    case "second John":
+      result = [NT, "2 John"];
+      break;
+
+    case "3 JN.":
+    case "3 Jn.":
+    case "3 JOHN":
+    case "3 John":
+    case "iii JN.":
+    case "iii Jn.":
+    case "iii JOHN":
+    case "iii John":
+    case "III JN.":
+    case "III Jn.":
+    case "III JOHN":
+    case "III John":
+    case "THIRD JN.":
+    case "THIRD Jn.":
+    case "THIRD JOHN":
+    case "THIRD John":
+    case "Third JN.":
+    case "Third Jn.":
+    case "Third JOHN":
+    case "Third John":
+    case "third JN.":
+    case "third Jn.":
+    case "third JOHN":
+    case "third John":
+      result = [NT, "3 John"];
+      break;
+
+    case "JUDE":
+    case "Jude":
+      result = [NT, "Jude"];
+      break;
+
+    case "RV.":
+    case "Rv.":
+    case "REV.":
+    case "Rev.":
+    case "REVELATION":
+    case "Revelation":
+      result = [NT, "Rev."];
+      break;
+
+    default:
+      throw `unknown name: '${name}'`;
+  }
+  return parts ? result : result[0][result[1]];
+};
+
+var getBookRegex_new = function(options) {
+  return new RegExp(
+      "(^|[^a-z0-9])((?:G(?:N\\.|n\\.|EN(?:\\.|ESIS)|en(?:\\.|esis)|AL(?:\\.|ATIANS)|al(?:\\.|atians))|E(?:X(?:\\.|O(?:\\.|D(?:\\.|US)))|x(?:\\.|o(?:\\.|d(?:\\.|us)))|ST(?:\\.|H(?:\\.|ER))|st(?:\\.|h(?:\\.|er))|CCL(?:\\.|ES(?:\\.|IASTES))|ccl(?:\\.|es(?:\\.|iastes))|Z(?:R(?:\\.|A)|\\.|EK(?:\\.|IEL))|z(?:r(?:\\.|a)|\\.|ek(?:\\.|iel))|PH(?:\\.|ESIANS)|ph(?:\\.|esians))|L(?:V\\.|v\\.|EV(?:\\.|ITICUS)|ev(?:\\.|iticus)|AM(?:\\.|ENTATIONS)|am(?:\\.|entations)|K\\.|k\\.|UKE|uke)|N(?:M\\.|m\\.|UM(?:\\.|BERS)|um(?:\\.|bers)|EH(?:\\.|EMIAH)|eh(?:\\.|emiah)|AH(?:\\.|UM)|ah(?:\\.|um))|D(?:T\\.|t\\.|EUT\\.|UETERONOMY|eut(?:\\.|eronomy)|N\\.|n\\.|AN(?:\\.|IEL)|an(?:\\.|iel))|J(?:O(?:\\.|SH(?:\\.|UA)|B|EL|N(?:\\.|AH)|HN)|o(?:\\.|sh(?:\\.|ua)|b|el|n(?:\\.|ah)|hn)|DS\\.|ds\\.|B\\.|b\\.|ER(?:\\.|EMIAH)|er(?:\\.|emiah)|L\\.|l\\.|N\\.|n\\.|A(?:\\.|S\\.|MES)|a(?:\\.|s\\.|mes)|UD(?:G(?:\\.|ES)|E)|ud(?:g(?:\\.|es)|e))|R(?:U(?:\\.|TH)|u(?:\\.|th)|OM(?:\\.|ANS)|om(?:\\.|ans)|V\\.|v\\.|EV(?:\\.|ELATION)|ev(?:\\.|elation))|F(?:IRST\\s+(?:S(?:M\\.|m\\.|AM(?:\\.|UEL)|am(?:\\.|uel))|K(?:GS\\.|gs\\.|INGS|ings)|C(?:HR(?:\\.|ON(?:\\.|ICLES))|hr(?:\\.|on(?:\\.|icles))|OR(?:\\.|INTHIANS)|or(?:\\.|inthians))|T(?:HES(?:\\.|S(?:\\.|ALONIANS))|hes(?:\\.|s(?:\\.|alonians))|M\\.|m\\.|IM(?:\\.|OTHY)|im(?:\\.|othy))|P(?:T\\.|t\\.|ET(?:\\.|ER)|et(?:\\.|er))|J(?:N\\.|n\\.|OHN|ohn))|irst\\s+(?:S(?:M\\.|m\\.|AM(?:\\.|UEL)|am(?:\\.|uel))|K(?:GS\\.|gs\\.|INGS|ings)|C(?:HR(?:\\.|ON(?:\\.|ICLES))|hr(?:\\.|on(?:\\.|icles))|OR(?:\\.|INTHIANS)|or(?:\\.|inthians))|T(?:HES(?:\\.|S(?:\\.|ALONIANS))|hes(?:\\.|s(?:\\.|alonians))|M\\.|m\\.|IM(?:\\.|OTHY)|im(?:\\.|othy))|P(?:T\\.|t\\.|ET(?:\\.|ER)|et(?:\\.|er))|J(?:N\\.|n\\.|OHN|ohn)))|i(?:\\s+(?:S(?:M\\.|m\\.|AM(?:\\.|UEL)|am(?:\\.|uel))|K(?:GS\\.|gs\\.|INGS|ings)|C(?:HR(?:\\.|ON(?:\\.|ICLES))|hr(?:\\.|on(?:\\.|icles))|OR(?:\\.|INTHIANS)|or(?:\\.|inthians))|T(?:HES(?:\\.|S(?:\\.|ALONIANS))|hes(?:\\.|s(?:\\.|alonians))|M\\.|m\\.|IM(?:\\.|OTHY)|im(?:\\.|othy))|P(?:T\\.|t\\.|ET(?:\\.|ER)|et(?:\\.|er))|J(?:N\\.|n\\.|OHN|ohn))|i(?:\\s+(?:S(?:M\\.|m\\.|AM(?:\\.|UEL)|am(?:\\.|uel))|K(?:GS\\.|gs\\.|INGS|ings)|C(?:HR(?:\\.|ON(?:\\.|ICLES))|hr(?:\\.|on(?:\\.|icles))|OR(?:\\.|INTHIANS)|or(?:\\.|inthians))|T(?:HES(?:\\.|S(?:\\.|ALONIANS))|hes(?:\\.|s(?:\\.|alonians))|M\\.|m\\.|IM(?:\\.|OTHY)|im(?:\\.|othy))|P(?:T\\.|t\\.|ET(?:\\.|ER)|et(?:\\.|er))|J(?:N\\.|n\\.|OHN|ohn))|i\\s+J(?:N\\.|n\\.|OHN|ohn)))|I(?:\\s+(?:S(?:M\\.|m\\.|AM(?:\\.|UEL)|am(?:\\.|uel))|K(?:GS\\.|gs\\.|INGS|ings)|C(?:HR(?:\\.|ON(?:\\.|ICLES))|hr(?:\\.|on(?:\\.|icles))|OR(?:\\.|INTHIANS)|or(?:\\.|inthians))|T(?:HES(?:\\.|S(?:\\.|ALONIANS))|hes(?:\\.|s(?:\\.|alonians))|M\\.|m\\.|IM(?:\\.|OTHY)|im(?:\\.|othy))|P(?:T\\.|t\\.|ET(?:\\.|ER)|et(?:\\.|er))|J(?:N\\.|n\\.|OHN|ohn))|S(?:\\.|A(?:\\.|IAH))|s(?:\\.|a(?:\\.|iah))|I(?:\\s+(?:S(?:M\\.|m\\.|AM(?:\\.|UEL)|am(?:\\.|uel))|K(?:GS\\.|gs\\.|INGS|ings)|C(?:HR(?:\\.|ON(?:\\.|ICLES))|hr(?:\\.|on(?:\\.|icles))|OR(?:\\.|INTHIANS)|or(?:\\.|inthians))|T(?:HES(?:\\.|S(?:\\.|ALONIANS))|hes(?:\\.|s(?:\\.|alonians))|M\\.|m\\.|IM(?:\\.|OTHY)|im(?:\\.|othy))|P(?:T\\.|t\\.|ET(?:\\.|ER)|et(?:\\.|er))|J(?:N\\.|n\\.|OHN|ohn))|I\\s+J(?:N\\.|n\\.|OHN|ohn)))|S(?:ECOND\\s+(?:S(?:M\\.|m\\.|AM(?:\\.|UEL)|am(?:\\.|uel))|K(?:GS\\.|gs\\.|INGS|ings)|C(?:HR(?:\\.|ON(?:\\.|ICLES))|hr(?:\\.|on(?:\\.|icles))|OR(?:\\.|INTHIANS)|or(?:\\.|inthians))|T(?:HES(?:\\.|S(?:\\.|ALONIANS))|hes(?:\\.|s(?:\\.|alonians))|M\\.|m\\.|IM(?:\\.|OTHY)|im(?:\\.|othy))|P(?:T\\.|t\\.|ET(?:\\.|ER)|et(?:\\.|er))|J(?:N\\.|n\\.|OHN|ohn))|econd\\s+(?:S(?:M\\.|m\\.|AM(?:\\.|UEL)|am(?:\\.|uel))|K(?:GS\\.|gs\\.|INGS|ings)|C(?:HR(?:\\.|ON(?:\\.|ICLES))|hr(?:\\.|on(?:\\.|icles))|OR(?:\\.|INTHIANS)|or(?:\\.|inthians))|T(?:HES(?:\\.|S(?:\\.|ALONIANS))|hes(?:\\.|s(?:\\.|alonians))|M\\.|m\\.|IM(?:\\.|OTHY)|im(?:\\.|othy))|P(?:T\\.|t\\.|ET(?:\\.|ER)|et(?:\\.|er))|J(?:N\\.|n\\.|OHN|ohn))|ONG\\s+OF SO(?:NGS|L(?:OMON|\\.))|ong\\s+of So(?:ngs|l(?:omon|\\.))|G\\.|g\\.|\\.\\s*S\\.)|1\\s+(?:S(?:M\\.|m\\.|AM(?:\\.|UEL)|am(?:\\.|uel))|K(?:GS\\.|gs\\.|INGS|ings)|C(?:HR(?:\\.|ON(?:\\.|ICLES))|hr(?:\\.|on(?:\\.|icles))|OR(?:\\.|INTHIANS)|or(?:\\.|inthians))|T(?:HES(?:\\.|S(?:\\.|ALONIANS))|hes(?:\\.|s(?:\\.|alonians))|M\\.|m\\.|IM(?:\\.|OTHY)|im(?:\\.|othy))|P(?:T\\.|t\\.|ET(?:\\.|ER)|et(?:\\.|er))|J(?:N\\.|n\\.|OHN|ohn))|first\\s+(?:S(?:M\\.|m\\.|AM(?:\\.|UEL)|am(?:\\.|uel))|K(?:GS\\.|gs\\.|INGS|ings)|C(?:HR(?:\\.|ON(?:\\.|ICLES))|hr(?:\\.|on(?:\\.|icles))|OR(?:\\.|INTHIANS)|or(?:\\.|inthians))|T(?:HES(?:\\.|S(?:\\.|ALONIANS))|hes(?:\\.|s(?:\\.|alonians))|M\\.|m\\.|IM(?:\\.|OTHY)|im(?:\\.|othy))|P(?:T\\.|t\\.|ET(?:\\.|ER)|et(?:\\.|er))|J(?:N\\.|n\\.|OHN|ohn))|2\\s+(?:S(?:M\\.|m\\.|AM(?:\\.|UEL)|am(?:\\.|uel))|K(?:GS\\.|gs\\.|INGS|ings)|C(?:HR(?:\\.|ON(?:\\.|ICLES))|hr(?:\\.|on(?:\\.|icles))|OR(?:\\.|INTHIANS)|or(?:\\.|inthians))|T(?:HES(?:\\.|S(?:\\.|ALONIANS))|hes(?:\\.|s(?:\\.|alonians))|M\\.|m\\.|IM(?:\\.|OTHY)|im(?:\\.|othy))|P(?:T\\.|t\\.|ET(?:\\.|ER)|et(?:\\.|er))|J(?:N\\.|n\\.|OHN|ohn))|second\\s+(?:S(?:M\\.|m\\.|AM(?:\\.|UEL)|am(?:\\.|uel))|K(?:GS\\.|gs\\.|INGS|ings)|C(?:HR(?:\\.|ON(?:\\.|ICLES))|hr(?:\\.|on(?:\\.|icles))|OR(?:\\.|INTHIANS)|or(?:\\.|inthians))|T(?:HES(?:\\.|S(?:\\.|ALONIANS))|hes(?:\\.|s(?:\\.|alonians))|M\\.|m\\.|IM(?:\\.|OTHY)|im(?:\\.|othy))|P(?:T\\.|t\\.|ET(?:\\.|ER)|et(?:\\.|er))|J(?:N\\.|n\\.|OHN|ohn))|P(?:S(?:\\.|S\\.|A(?:\\.|LM(?:|S)))|s(?:\\.|s\\.|a(?:\\.|lm(?:|s)))|R(?:V\\.|OV(?:\\.|ERBS))|r(?:v\\.|ov(?:\\.|erbs))|HIL(?:\\.|IPPIANS|M\\.|EM(?:\\.|ON))|hil(?:\\.|ippians|m\\.|em(?:\\.|on)))|H(?:OS(?:\\.|EA)|os(?:\\.|ea)|B\\.|b\\.|G\\.|g\\.|A(?:B(?:\\.|AKKUK,\\s+Habakkuk)|G(?:\\.|GAI))|a(?:b\\.|g(?:\\.|gai))|EB(?:\\.|REWS)|eb(?:\\.|rews))|A(?:M(?:\\.|OS)|m(?:\\.|os)|CTS|cts)|O(?:B(?:\\.|A(?:\\.|D(?:\\.|IAH)))|b(?:\\.|a(?:\\.|d(?:\\.|iah))))|M(?:IC(?:\\.|AH)|ic(?:\\.|ah)|T\\.|t\\.|A(?:L(?:\\.|ACHI)|TT(?:\\.|HEW)|RK)|a(?:l(?:\\.|achi)|tt(?:\\.|hew)|rk)|K\\.|k\\.)|Z(?:E(?:PH(?:\\.|ANIAH)|CH(?:\\.|ARIAH))|e(?:ph(?:\\.|aniah)|ch(?:\\.|ariah)))|C(?:OL(?:\\.|OSSIANS)|ol(?:\\.|ossians))|T(?:I(?:\\.|TUS)|i(?:\\.|tus)|HIRD\\s+J(?:N\\.|n\\.|OHN|ohn)|hird\\s+J(?:N\\.|n\\.|OHN|ohn))|3\\s+J(?:N\\.|n\\.|OHN|ohn)|third\\s+J(?:N\\.|n\\.|OHN|ohn)))(?![a-z])",
+      options);
+};
+  
+function emptyObj(obj) {
+  return Object.keys(obj).length < 1;
+}
+  
+function assert(value) {
+  if (!value) {
+    throw 'Assert failed!';
+  }
+}
+
+function log(msg) {
+  console.log(msg);
+  if (typeof log.console === 'undefined') {
+    log.console = document.createTextNode('');
+    document.getElementById('console').appendChild(log.console);
+  }
+  
+  log.console.appendData(msg + '\n');
+}
+
+function add_cases(cases, matches) {
+  var indeces = [];
+  for (var x = 0; x < matches.length; ++x) {
+    indeces.push(0);
+  }
+
+  while(true) {
+    var parts = [];
+    for (var x = 0; x < matches.length; ++x) {
+      parts.push(matches[x][indeces[x]]);
+    }
+
+    cases.push(parts.join(' '));
+
+    for (var x = indeces.length - 1; true; --x) {
+      ++indeces[x];
+      if (indeces[x] < matches[x].length) {
+        break;
+      }
+      if (x === 0) {
+        return;
+      }
+      indeces[x] = 0;
+    }
+  }
+};
+
+(function(){
+  var cases = [];
+
+  for (var key in OT) {
+    if (!OT[key].matches) {
+      console.log(key, 'missing matches property.');
+    }
+    add_cases(cases, OT[key].matches);
+  }
+
+  for (var key in NT) {
+    if (!NT[key].matches) {
+      console.log(key, 'missing matches property.');
+    }
+    add_cases(cases, NT[key].matches);
+  }
+  
+  console.time("New getBook");
+  var value;
+  for (var z = 0; z < 2500000; ++z) {
+    for (var x = 0; cases.length < x; value = cases[x++]) {
+        let [testament, book] = getBook_new(value, true);
+    }
+  }
+  console.timeEnd("New getBook");
+  
+  console.time("Old getBook");
+  var value;
+  for (var z = 0; z < 250000; ++z) {
+    for (var x = 0; cases.length < x; value = cases[x++]) {
+        let [testament, book] = getBook_old(value, true);
+    }
+  }
+  console.timeEnd("Old getBook");
+  
+  var new_regex = getBookRegex_new();
+  console.time("New Regex");
+  var value;
+  for (var z = 0; z < 2500000; ++z) {
+    for (var x = 0; cases.length < x; value = cases[x++]) {
+        new_regex.test(value);
+    }
+  }
+  console.timeEnd("New Regex");
+  
+  var old_regex = getBookRegex_old();
+  console.time("Old Regex");
+  var value;
+  for (var z = 0; z < 250000; ++z) {
+    for (var x = 0; cases.length < x; value = cases[x++]) {
+        old_regex.test(value);
+    }
+  }
+  console.timeEnd("Old Regex");
+  
+})();
+
+</script>
+  </body>
+</html>
