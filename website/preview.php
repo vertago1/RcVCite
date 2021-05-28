@@ -4,7 +4,7 @@ require_once './includes/functions.php';
 $PAGE_TITLE='RcVCite - Pop-up Bible Verses on Mouse-over';
 $PAGE_SHORT='Preview';
 
-$RCVCITE_VERSION='v00_05';
+$RCVCITE_VERSION='_v00_05';
 
 require_once './includes/head.php';
 ?>

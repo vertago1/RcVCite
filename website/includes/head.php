@@ -6,19 +6,18 @@
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1' name='viewport' />
     <meta name="viewport" content="width=device-width" />
     <title><?php echo isset($PAGE_TITLE)?$PAGE_TITLE:"RcVCite"; ?></title>
-    <link rel="icon" type="image/svg+xml" href="./img/icon.svg"/>
-    <link rel="alternate icon" type="image/png" href="./img/icon.png"/>
-<script type="text/javascript" src="./jquery.js"></script>
-    
+    <link rel="icon" type="image/svg+xml" href="/img/icon.svg"/>
+    <link rel="alternate icon" type="image/png" href="/img/icon.png"/>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
 
 <link rel="stylesheet" type="text/css" href="./site-style.css"/>
-<script type="text/javascript" src="./versification.js"></script>
-<script type="text/javascript" src="./RcVCite_<?= $RCVCITE_VERSION ?? 'v00_04' ?>.js"></script>
-<link rel="stylesheet" type="text/css" href="./RcVCite.css" id="rcvcite_styletag_old"/>
+<script type="text/javascript" src="./core/versification.js"></script>
+<script type="text/javascript" src="./core/RcVCite<?= $RCVCITE_VERSION ?? '' ?>.js"></script>
+<link rel="stylesheet" type="text/css" href="./core/RcVCite.css" id="rcvcite_styletag_old"/>
 <style type='text/css' id="rcvcite_styletag_new"></style>
 <script type="text/javascript">
 RcVCite.horzPad=15;
