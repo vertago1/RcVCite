@@ -62,4 +62,3 @@ javascript:(function(){function a(f){if(!f.getElementById("RcVCite_bookmarklet")
 <a href="#top" class="btn btn-xs btn-primary">back to top</a>
 <?php
 require_once './includes/foot.php';
-?>

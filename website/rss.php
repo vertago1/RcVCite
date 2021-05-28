@@ -1,6 +1,9 @@
 <?php
 require_once './includes/updates.php';
 
+header('Content-Disposition: attachment; filename="rss.xml"');
+header('Content-Type: application/rss+xml');
+
 echo '<?xml version="1.0" encoding="utf-8"?>';
 ?>
 

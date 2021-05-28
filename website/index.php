@@ -175,4 +175,3 @@ If you see any errors listed for RcVCite.js, or versification.js please report t
 <a href="#top" class="btn btn-xs btn-primary">back to top</a>
 <?php
 require_once './includes/foot.php';
-?>

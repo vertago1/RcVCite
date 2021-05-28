@@ -69,5 +69,3 @@ $UPDATES=array(
   strtotime('2013-12-07')=>array('title'=>'Added Preferences for the Firefox Extension',
     'description'=>'Added preferences to the Firefox extension, and updated is sources.')
   );
-
-?>

@@ -25,4 +25,3 @@ For example, what did you do immediately prior to when the problem occurred.</li
 
 <?php
 require_once './includes/foot.php';
-?>
