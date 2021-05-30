@@ -9,6 +9,7 @@ jobs:
       - image: cimg/php:8.0.6
     steps:
       - checkout
+      - run: sudo apt-get update && sudo apt-get install -y rsync
       - run: make
   test:
     docker:
