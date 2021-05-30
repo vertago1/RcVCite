@@ -1,0 +1,8 @@
+
+version: 2.1
+
+workflow:
+  build_and_test:
+    steps:
+      run: make default test
+  
