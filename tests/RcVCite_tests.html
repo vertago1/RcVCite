@@ -4,10 +4,12 @@
     <title>RcVCite Tests</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="./jquery.js"></script>
-    <script type="text/javascript" src="./versification.js"></script>
-    <script type="text/javascript" src="./RcVCite_v00_04.js"></script>
-    <link rel="stylesheet" type="text/css" href="./RcVCite.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
+        crossorigin="anonymous"></script>
+    <script src="../core/versification.js"></script>
+    <script src="../core/RcVCite.js"></script>
+    <link rel="stylesheet" type="text/css" href="../core/RcVCite.css"/>
   </head>
   <body>
     <div id="exclusion_tests">
@@ -89,7 +91,7 @@
       <iframe src="./RcVCite_iframe_tests.html" width="400"></iframe>
       <iframe src="http://rcvcite.net/" width="400"></iframe>
     </div>
-    <script type="text/javascript">
+    <script>
 
 var get_reference = $node => {
   var book = $node.attr('book');
@@ -100,6 +102,8 @@ var get_reference = $node => {
 };
 
 $(document).ready(function(){
+  console.info("Starting DOM tests...");
+  
   window.error_list = [];
   
   $('#exclusion_tests p').each((index, value) => {

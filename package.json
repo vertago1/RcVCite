@@ -1,0 +1,11 @@
+{
+  "author": "vertago1@gmail.com",
+  "contributors": [],
+  "devDependencies": {
+    "jsdom": "^16.6.0"
+  },
+  "scripts": {
+    "test": "node tests/test.js"
+  },
+  "version": "0.1.0"
+}
