@@ -62,6 +62,7 @@ sitemap: staticstuff
 		echo $(RED)$(SITEMAP_GENERATOR) missing$(NC); \
 		echo $(RED)to install dependencies run:; \
 		echo "    "sudo npm -g install sitemap-generator-cli$(NC); \
+		exit 1; \
 	fi
 	cd ./html; \
 	    sitemap-generator 'https://rcvcite.net' sitemap.xml; \
