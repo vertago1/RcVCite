@@ -5,7 +5,7 @@ PHP := 'php'
 SITEMAP_GENERATOR := sitemap-generator
 
 PREFIX := ./html
-REALPREFIX = $(realpath $(PREFIX))
+REALPREFIX := $(realpath .)/$(PREFIX)
 
 GREEN := '\e[0;32m'
 RED := '\e[0;31m'

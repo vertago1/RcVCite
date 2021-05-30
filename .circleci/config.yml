@@ -15,7 +15,6 @@ jobs:
       - image: cimg/node:16.2.0
     steps:
       - checkout
-      - node/install
       - node/install-packages
       - run: make test
 
