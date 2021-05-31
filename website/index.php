@@ -93,7 +93,7 @@ Note that it affects all the overlays on the page.
 <b><i>Any changes you do not save will be lost.</i></b><br>
 Remember to copy and paste this into a text file to save it when you are done.
 <script type="text/javascript">
-$.ajax({'url':"./RcVCite.css",success:function(data){
+$.ajax({'url':"./core/RcVCite.css",success:function(data){
   $(document).ready(function(){
     $('#rcvcite_styletext').val(data);
   });
@@ -107,7 +107,7 @@ function checkStylePreview(){
       } else {
         overlay.css({'position':'relative','left':''});
       }
-    }
+    };
     handler();
   });
 }

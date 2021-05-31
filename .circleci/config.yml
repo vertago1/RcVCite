@@ -4,22 +4,37 @@ orbs:
   node: circleci/node@4.4.0
 
 jobs:
-  build:
+  extensions:
     docker:
-      - image: cimg/php:8.0.6-node
+      - image: cimg/base:2021.05
     steps:
       - checkout
-      - run: sudo apt-get update && sudo apt-get install -y rsync
-      - run: sudo npm -g install sitemap-generator-cli
-      - run: make
-  test:
+      - run: make extensions
+  tests:
     docker:
       - image: cimg/node:16.2.0
     steps:
       - checkout
+      # Hack to cache npm packages for 'circleci local execute'
+      - run: sudo chown circleci:circleci ~/.npm || true
       - node/install-packages
       - run: make test
+  website:
+    docker:
+      - image: cimg/php:8.0.6-node
+    steps:
+      - checkout
+      # Hack to cache npm packages for 'circleci local execute'
+      - run: sudo chown circleci:circleci '~/.npm' || true
+      # Use ~/.npm for global install for caching with npm global install.
+      - run: npm config set prefix '~/.npm'
+      - run: npm -g install sitemap-generator-cli
+      - run: PATH="/home/circleci/.npm/bin:$PATH" make website
 
 workflows:
-  build_and_test:
-    jobs: [build, test]
+  version: 2
+  all_jobs:
+    jobs:
+      - extensions
+      - tests
+      - website

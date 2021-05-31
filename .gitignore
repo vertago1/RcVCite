@@ -1,5 +1,8 @@
+/.cache
 /nbproject
 /node_modules
+
+/extensions/*.zip
 
 /website/BingSiteAuth.xml
 /website/google*.html

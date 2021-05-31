@@ -1,15 +1,10 @@
 #PAGES=$(shell find . -iname "*.php"  -and -not -path './includes/*' | sed 's/php$$/html/' | xargs)
 #TEMPLATES=$(shell find ./includes -iname "*.php" | xargs)
 
-PHP := 'php'
-SITEMAP_GENERATOR := sitemap-generator
+include ../common.mk
 
 PREFIX := ./html
 REALPREFIX := $(realpath .)/$(PREFIX)
-
-GREEN := '\e[0;32m'
-RED := '\e[0;31m'
-NC := '\e[0m' # No Color
 
 
 .PHONY: default
@@ -45,15 +40,14 @@ $(REALPREFIX)/rss.xml: rss.php includes/updates.php
 .PHONY: staticstuff
 staticstuff:
 	@echo -e $(GREEN)Syncing other files...$(NC)
-	@rsync -auviLk \
---include='.htaccess' \
---exclude='*.php' \
---exclude='Makefile' \
---exclude='html' \
---exclude='nbproject' \
---exclude='includes' \
---exclude='.*' \
-./ $(REALPREFIX)/
+	cp -Ru --preserve \
+	    ../core \
+	    img \
+	    .htaccess \
+	    *.css \
+	    $(wildcard *.html) \
+	    $(wildcard *.xml) \
+	    $(REALPREFIX)/
 
 .PHONY: sitemap
 sitemap: staticstuff
